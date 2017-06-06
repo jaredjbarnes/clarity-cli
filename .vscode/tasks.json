@@ -1,0 +1,21 @@
+{
+    "version": "0.1.0",
+    "command": "node",
+    "isShellCommand": true,
+    "args": [],
+    "showOutput": "always",
+    "echoCommand": true,
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "compile",
+            "args": [
+                "${workspaceRoot}/node_modules/babel-cli/bin/babel.js",
+                "src",
+                "--out-dir",
+                "lib",
+                "--source-maps"
+            ]
+        }
+    ]
+}

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Clarity setup for vscode.",
   "main": "lib/index.js",
+  "bin": {
+    "clarity": "./lib/index.js"
+  },
   "dependencies": {
     "child-process-es6-promise": "^1.1.0",
     "commander": "^2.9.0",

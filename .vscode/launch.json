@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Create Program",
+            "program": "${workspaceRoot}/lib/index.js",
+            "args": [
+                "create-project",
+                "project-name"
+            ],
+            "preLaunchTask": "compile",
+            "cwd": "${workspaceRoot}",
+            "outFiles": ["${workspaceRoot}/lib/**/*.js"],
+            "sourceMaps": true
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Process",
+            "port": 5858
+        }
+    ]
+}
