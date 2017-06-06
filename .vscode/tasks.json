@@ -9,6 +9,7 @@
     "tasks": [
         {
             "taskName": "compile",
+            "isBuildCommand": true,
             "args": [
                 "${workspaceRoot}/node_modules/babel-cli/bin/babel.js",
                 "src",
