@@ -23,8 +23,6 @@ export default (program) => {
         return fs.writeJson(packageJsonFile, packageJson);
     }).then(() => {
         return childProcess.exec("npm install", { cwd: projectDirectory });
-    }).then(()=>{
-        return childProcess.exec("node /node_modules/babel-cli/bin/babel.js src --out-dir lib --source-maps",  { cwd: projectDirectory });
     });
 
 }
