@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/commands/scott.js"],"names":["program","option","parse","process","argv"],"mappings":";;;;;;kBAAe,UAACA,OAAD,EAAW;AACtBA,YAAQC,MAAR,CAAe,eAAf,EAAgC,eAAhC,EAAiDC,KAAjD,CAAuDC,QAAQC,IAA/D;AACH,C","file":"scott.js","sourcesContent":["export default (program)=>{\n    program.option(\"--port <port>\", \"Custom port l\").parse(process.argv);\n}"]}
