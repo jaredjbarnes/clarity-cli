@@ -8,7 +8,9 @@
             "program": "${workspaceRoot}/lib/index.js",
             "args": [
                 "create-project",
-                "project-name"
+                "project-name2",
+                "--type",
+                "system"
             ],
             "preLaunchTask": "compile",
             "cwd": "${workspaceRoot}",

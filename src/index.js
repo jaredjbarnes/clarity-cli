@@ -23,14 +23,16 @@ fs.readdirSync(path.join(__dirname, "commands")).forEach((file) => {
     commands[commandName] = command;
 });
 
+var hasInitialized = false;
+
 program.version("0.0.1")
     .arguments("<cmd> [env]", "create a vscode project").action((name) => {
-        setTimeout(() => {
+        if (!hasInitialized) {
+            hasInitialized = true;
             if (typeof commands[name] === "function") {
                 commands[name](program);
             }
-        }, 0);
+        }
     })
     .parse(process.argv);
 
-    
