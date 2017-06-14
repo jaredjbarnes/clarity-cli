@@ -2,11 +2,6 @@ import fs from "fs-extra";
 import path from "path";
 import childProcess from "child-process-es6-promise";
 
-var templates = {
-    babel: "project-template",
-    system: "system-project-template"
-};
-
 export default (program) => {
 
     program.version("0.0.1")
@@ -16,13 +11,14 @@ export default (program) => {
     var args = program.args;
     var command = args[0];
     var projectName = args[1] || "";
-    var type = program.type || "babel"
-    var templateName = templates[type] || templates.babel;
+    var templateName = "init-project-template";
 
     var templateDirectory = path.join(__dirname, "../../templates/", templateName);
     var projectDirectory = process.cwd();
+    var readmeFile = path.join(projectDirectory, "README.md");
     var packageJsonFile = path.join(projectDirectory, "package.json");
     var existingPackageJson = null;
+    var existingReadme = null;
 
     if (projectName == null) {
         throw new Error("Please provide a project name.");
@@ -30,7 +26,12 @@ export default (program) => {
 
     console.log("Creating template....");
 
-    fs.readJson(packageJsonFile).catch(()=>{
+    fs.readFile(readmeFile).catch(()=>{
+        return null;
+    }).then((readme) => {
+        existingReadme = readme;
+        return fs.readJson(packageJsonFile)
+    }).catch(() => {
         return {};
     }).then((json) => {
         existingPackageJson = json;
@@ -43,6 +44,10 @@ export default (program) => {
 
         console.log("Saving package.json...");
         return fs.writeJson(packageJsonFile, newPackageJson);
+    }).then(()=>{
+        if (existingReadme != null){
+            return fs.writeFile(readmeFile, existingReadme);
+        }
     }).then(() => {
         console.log("Running npm for you, this may take a while...");
         return childProcess.exec("npm install", { cwd: projectDirectory });

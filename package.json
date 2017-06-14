@@ -1,6 +1,6 @@
 {
   "name": "clarity-cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Clarity setup for vscode.",
   "main": "lib/index.js",
   "bin": {
