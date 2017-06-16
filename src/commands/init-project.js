@@ -2,6 +2,31 @@ import fs from "fs-extra";
 import path from "path";
 import childProcess from "child-process-es6-promise";
 
+function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function mergeDeep(target, ...sources) {
+    if (!sources.length) {
+        return target;
+    }
+
+    const source = sources.shift();
+
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key]) Object.assign(target, { [key]: {} });
+                mergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
+    }
+
+    return mergeDeep(target, ...sources);
+}
+
 export default (program) => {
 
     program.version("0.0.1")
@@ -87,7 +112,7 @@ export default (program) => {
 
     }).then((packageJson) => {
 
-        var newPackageJson = Object.assign({ name: projectName }, packageJson, existingPackageJson);
+        var newPackageJson = mergeDeep({ name: projectName }, packageJson, existingPackageJson);
 
         console.log("Saving package.json...");
         return fs.writeJson(packageJsonFile, newPackageJson);
