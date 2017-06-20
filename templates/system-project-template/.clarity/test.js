@@ -31,6 +31,7 @@ fs.readdir(testDirectory).then((files) => {
 
             var prepare = promisify(defaultModules.prepare);
             var destroy = promisify(defaultModules.destroy);
+            var clean = promisify(defaultModules.clean);
 
             Object.keys(defaultModules).filter((testName) => {
                 return specialTestNames[testName] == null;
@@ -53,8 +54,10 @@ fs.readdir(testDirectory).then((files) => {
                         console.log("FAILED: " + testName);
                         console.log(error);
 
-                        return Promise.reject(error);
+                        return Promise.resolve(null);
                     }
+                }).then(()=>{
+                    return clean();
                 });
             }, prepare()).catch((error) => {
                 console.log("UNEXPECTED FAILURE: Most likely an async error.");
