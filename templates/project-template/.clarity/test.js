@@ -2,6 +2,14 @@ var fs = require("fs-extra");
 var path = require("path");
 
 const testDirectory = path.join(__dirname, "../lib/tests");
+const specialTestNames = {
+    "prepare":true,
+    "destroy": true
+};
+
+const promiseFunction = ()=>{
+    return Promise.resolve(null);
+}
 
 fs.readdir(testDirectory).then((files) => {
     files.forEach((file) => {
@@ -10,7 +18,12 @@ fs.readdir(testDirectory).then((files) => {
             var tests = require(path.join(testDirectory, file));
             var defaultModules = tests.default || tests;
 
-            Object.keys(defaultModules).reduce((promise, testName) => {
+            var prepare  = defaultModules.prepare || promiseFunction;
+            var destroy = defaultModules.destroy || promiseFunction;
+
+            Object.keys(defaultModules).filter((testName)=>{
+                return specialTestNames[testName] == null;
+            }).reduce((promise, testName) => {
                 if (typeof defaultModules[testName] !== "function") {
                     return Promise.resolve("UNEXPECTED EXPORT:  This export '" + testName + "' needs to be a function.");
                 }
@@ -32,7 +45,9 @@ fs.readdir(testDirectory).then((files) => {
                         return Promise.reject(error);
                     }
                 });
-            }, Promise.resolve()).catch((error) => {
+            }, prepare()).then(()=>{
+                return destroy();
+            }).catch((error) => {
                 console.log("UNEXPECTED FAILURE: Most likely an async error.");
             });
         }
