@@ -4,7 +4,8 @@ var path = require("path");
 const testDirectory = path.join(__dirname, "../lib/tests");
 const specialTestNames = {
     "prepare": true,
-    "destroy": true
+    "destroy": true,
+    "clean": true
 };
 
 const promiseFunction = () => {
@@ -56,7 +57,7 @@ fs.readdir(testDirectory).then((files) => {
 
                         return Promise.resolve(null);
                     }
-                }).then(()=>{
+                }).then(() => {
                     return clean();
                 });
             }, prepare()).catch((error) => {
