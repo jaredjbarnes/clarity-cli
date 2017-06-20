@@ -3,25 +3,36 @@ var path = require("path");
 
 const testDirectory = path.join(__dirname, "../lib/tests");
 const specialTestNames = {
-    "prepare":true,
+    "prepare": true,
     "destroy": true
 };
 
-const promiseFunction = ()=>{
+const promiseFunction = () => {
     return Promise.resolve(null);
+}
+
+const promisify = (fn) => {
+    return () => {
+        fn = fn || promiseFunction;
+        var result = fn();
+
+        result = result instanceof Promise ? result : Promise.resolve(result);
+
+        return result;
+    }
 }
 
 fs.readdir(testDirectory).then((files) => {
     files.forEach((file) => {
         if (path.extname(file) === ".js") {
-            
+
             var tests = require(path.join(testDirectory, file));
             var defaultModules = tests.default || tests;
 
-            var prepare  = defaultModules.prepare || promiseFunction;
-            var destroy = defaultModules.destroy || promiseFunction;
+            var prepare = promisify(defaultModules.prepare);
+            var destroy = promisify(defaultModules.destroy);
 
-            Object.keys(defaultModules).filter((testName)=>{
+            Object.keys(defaultModules).filter((testName) => {
                 return specialTestNames[testName] == null;
             }).reduce((promise, testName) => {
                 if (typeof defaultModules[testName] !== "function") {
@@ -45,7 +56,7 @@ fs.readdir(testDirectory).then((files) => {
                         return Promise.reject(error);
                     }
                 });
-            }, prepare()).then(()=>{
+            }, prepare()).then(() => {
                 return destroy();
             }).catch((error) => {
                 console.log("UNEXPECTED FAILURE: Most likely an async error.");
