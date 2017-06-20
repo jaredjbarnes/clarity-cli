@@ -56,10 +56,10 @@ fs.readdir(testDirectory).then((files) => {
                         return Promise.reject(error);
                     }
                 });
-            }, prepare()).then(() => {
-                return destroy();
-            }).catch((error) => {
+            }, prepare()).catch((error) => {
                 console.log("UNEXPECTED FAILURE: Most likely an async error.");
+            }).then(() => {
+                return destroy();
             });
         }
     });
