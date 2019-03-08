@@ -34,7 +34,6 @@ export default (program) => {
         .parse(process.argv);
 
     var args = program.args;
-    var command = args[0];
     var projectName = args[1] || "";
     var templateName = "init-project-template";
 

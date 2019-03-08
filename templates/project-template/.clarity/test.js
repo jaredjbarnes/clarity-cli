@@ -1,7 +1,6 @@
 var fs = require("fs-extra");
 var path = require("path");
 
-
 const seperator = "============================================================";
 const startSeperator = "************************************************************";
 const testDirectory = path.join(__dirname, "../lib/tests");

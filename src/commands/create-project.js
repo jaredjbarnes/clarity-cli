@@ -14,7 +14,6 @@ export default (program) => {
         .parse(process.argv);
 
     var args = program.args;
-    var command = args[0];
     var projectName = args[1];
     var type = program.type || "babel"
     var templateName = templates[type] || templates.babel;
